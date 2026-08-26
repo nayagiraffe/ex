@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shakespeare: Choice & Verse</title>
+  <title>Shakespeare: Choice &amp; Verse</title>
   <meta name="description" content="셰익스피어의 딜레마 속으로: 당신의 선택은? 셰익스피어의 주요 작품과 명대사를 쉽고 흥미롭게 배울 수 있는 인터랙티브 텍스트 어드벤처 학습 웹 앱">
   
-  <!-- Google Fonts for premium typography -->
+  <!-- Literary display, quotation, and Korean reading faces -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&amp;family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&amp;family=Noto+Serif+KR:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 
   <style>
     /* Dark Antique parchment inspired design tokens */
@@ -24,9 +24,9 @@
       --accent-hover: #f3cf55;
       --border-color: #3d3025;
       --shadow-color: rgba(0, 0, 0, 0.6);
-      --font-antique: 'Cinzel', serif;
-      --font-serif: 'Noto Serif KR', serif;
-      --font-quote: 'Playfair Display', serif;
+      --font-antique: 'Cormorant Garamond', 'Noto Serif KR', Georgia, serif;
+      --font-serif: 'Noto Serif KR', 'AppleMyungjo', 'Batang', serif;
+      --font-quote: 'EB Garamond', 'Cormorant Garamond', Georgia, serif;
     }
 
     * {
@@ -39,7 +39,15 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       font-family: var(--font-serif);
-      line-height: 1.6;
+      font-weight: 400;
+      font-synthesis: none;
+      font-kerning: normal;
+      line-height: 1.78;
+      letter-spacing: -0.012em;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -72,9 +80,10 @@
 
     .header-logo {
       font-family: var(--font-antique);
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
+      font-size: 1.75rem;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.12em;
       color: var(--accent-color);
       text-decoration: none;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -130,26 +139,46 @@
 
     .hero-title {
       font-family: var(--font-antique);
-      font-size: 2.8rem;
-      font-weight: 800;
+      font-size: clamp(2.85rem, 8vw, 3.65rem);
+      font-weight: 600;
+      line-height: 1;
       color: var(--accent-color);
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.05em;
+      margin-bottom: 0.85rem;
+      letter-spacing: 0.035em;
       text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+      text-wrap: balance;
     }
 
     .hero-subtitle {
       font-family: var(--font-serif);
-      font-size: 1.2rem;
+      font-size: 1.08rem;
+      font-weight: 400;
+      line-height: 1.8;
+      letter-spacing: -0.018em;
       color: var(--text-muted);
       margin-bottom: 2.5rem;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-quote);
+      font-size: 1.18em;
+      font-weight: 500;
       font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle-divider {
+      display: inline-block;
+      margin: 0 0.55em;
+      color: rgba(212, 175, 55, 0.72);
     }
 
     .filter-title {
-      font-family: var(--font-antique);
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.55;
+      letter-spacing: 0.055em;
       color: var(--accent-color);
       margin-bottom: 0.8rem;
       text-transform: uppercase;
@@ -171,6 +200,9 @@
       border-radius: 20px;
       font-family: var(--font-serif);
       font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.55;
+      letter-spacing: -0.01em;
       cursor: pointer;
       transition: all 0.3s;
     }
@@ -191,10 +223,11 @@
     .btn-gold {
       background: linear-gradient(135deg, var(--accent-color), #b28d28);
       color: #120e0b;
-      font-family: var(--font-antique);
+      font-family: var(--font-serif);
       font-weight: 700;
-      font-size: 1.2rem;
-      letter-spacing: 0.1em;
+      font-size: 1.08rem;
+      line-height: 1.45;
+      letter-spacing: 0.045em;
       padding: 1rem 2.5rem;
       border: none;
       border-radius: 4px;
@@ -239,6 +272,9 @@
       align-items: center;
       margin-bottom: 1.5rem;
       font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.55;
+      letter-spacing: -0.014em;
     }
 
     .stat-badge {
@@ -268,8 +304,10 @@
 
     .play-title {
       font-family: var(--font-antique);
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.45;
+      letter-spacing: 0.085em;
       color: var(--accent-color);
       text-transform: uppercase;
       margin-bottom: 0.5rem;
@@ -277,16 +315,21 @@
 
     .scenario-question {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.45rem;
+      font-weight: 600;
       margin-bottom: 1.5rem;
-      line-height: 1.4;
+      line-height: 1.64;
+      letter-spacing: -0.028em;
       color: #fff;
+      text-wrap: balance;
     }
 
     .scenario-description {
       font-family: var(--font-serif);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
+      font-weight: 400;
+      line-height: 1.86;
+      letter-spacing: -0.016em;
       color: var(--text-muted);
       margin-bottom: 2rem;
       position: relative;
@@ -320,18 +363,23 @@
     }
 
     .choice-label {
-      font-family: var(--font-antique);
-      font-size: 0.8rem;
+      font-family: var(--font-serif);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.5;
       color: var(--accent-color);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.045em;
       margin-bottom: 0.3rem;
       display: block;
     }
 
     .choice-text {
       font-family: var(--font-serif);
-      font-size: 1rem;
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 1.82;
+      letter-spacing: -0.016em;
       color: var(--text-color);
     }
 
@@ -385,10 +433,11 @@
     }
 
     .modal-indicator {
-      font-family: var(--font-antique);
-      font-size: 1.8rem;
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      line-height: 1.45;
+      letter-spacing: -0.018em;
       margin-bottom: 1.2rem;
     }
 
@@ -410,23 +459,32 @@
 
     .quote-original {
       font-family: var(--font-quote);
-      font-size: 1.3rem;
+      font-size: 1.42rem;
+      font-weight: 500;
       font-style: italic;
       color: var(--accent-color);
       margin-bottom: 0.8rem;
-      line-height: 1.4;
+      line-height: 1.55;
+      letter-spacing: 0.005em;
+      white-space: pre-line;
+      font-variant-ligatures: common-ligatures discretionary-ligatures;
     }
 
     .quote-translation {
       font-family: var(--font-serif);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
+      font-weight: 400;
+      line-height: 1.84;
+      letter-spacing: -0.018em;
       color: var(--text-color);
     }
 
     .explanation-text {
-      font-size: 0.95rem;
+      font-size: 0.96rem;
+      font-weight: 400;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.84;
+      letter-spacing: -0.016em;
       margin-bottom: 1.8rem;
       border-top: 1px solid var(--border-color);
       padding-top: 1.2rem;
@@ -443,9 +501,11 @@
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.55;
       margin-bottom: 1.8rem;
-      font-family: var(--font-antique);
-      letter-spacing: 0.05em;
+      font-family: var(--font-serif);
+      letter-spacing: 0.025em;
     }
 
     /* Result View */
@@ -459,25 +519,44 @@
     }
 
     .result-title {
-      font-family: var(--font-antique);
-      font-size: 2.2rem;
+      font-family: var(--font-serif);
+      font-size: 2.05rem;
+      font-weight: 600;
+      line-height: 1.45;
+      letter-spacing: -0.022em;
       color: var(--accent-color);
       margin-bottom: 1rem;
+      text-wrap: balance;
+    }
+
+    .result-eyebrow {
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.6;
+      letter-spacing: 0.045em;
     }
 
     .archetype-name {
-      font-family: var(--font-antique);
-      font-size: 2.5rem;
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 7vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.032em;
       color: #fff;
       margin-bottom: 1.5rem;
       text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+      text-wrap: balance;
     }
 
     .archetype-desc {
       font-size: 1.1rem;
+      font-weight: 400;
       color: var(--text-muted);
       margin-bottom: 2rem;
-      line-height: 1.7;
+      line-height: 1.86;
+      letter-spacing: -0.018em;
     }
 
     .stat-grid {
@@ -496,16 +575,20 @@
 
     .stat-val {
       font-family: var(--font-antique);
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: var(--accent-color);
-      font-weight: 700;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: 0.015em;
     }
 
     .stat-lbl {
       font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.6;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.035em;
     }
 
     .action-row {
@@ -519,10 +602,11 @@
       background: transparent;
       border: 1px solid var(--border-color);
       color: var(--text-color);
-      font-family: var(--font-antique);
+      font-family: var(--font-serif);
       font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 0.1em;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      letter-spacing: 0.035em;
       padding: 0.9rem 2rem;
       border-radius: 4px;
       cursor: pointer;
@@ -564,7 +648,10 @@
 
     .archive-title {
       font-family: var(--font-antique);
-      font-size: 1.8rem;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: 0.035em;
       color: var(--accent-color);
     }
 
@@ -625,27 +712,40 @@
 
     .archive-play-tag {
       font-family: var(--font-antique);
+      font-size: 0.92rem;
+      font-weight: 600;
       color: var(--accent-color);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.055em;
     }
 
     .archive-quote-text {
       font-family: var(--font-quote);
-      font-size: 1.15rem;
+      font-size: 1.24rem;
+      font-weight: 500;
       font-style: italic;
+      line-height: 1.55;
+      letter-spacing: 0.004em;
       color: var(--text-color);
       margin-bottom: 0.5rem;
+      white-space: pre-line;
+      font-variant-ligatures: common-ligatures discretionary-ligatures;
     }
 
     .archive-quote-trans {
       font-family: var(--font-serif);
       font-size: 0.95rem;
+      font-weight: 400;
+      line-height: 1.76;
+      letter-spacing: -0.016em;
       color: var(--text-muted);
       margin-bottom: 1rem;
     }
 
     .archive-insight {
       font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.72;
+      letter-spacing: -0.012em;
       color: var(--text-muted);
       border-top: 1px dashed var(--border-color);
       padding-top: 0.8rem;
@@ -655,6 +755,8 @@
       text-align: center;
       padding: 2rem 1rem;
       font-size: 0.8rem;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
       color: var(--text-muted);
       border-top: 1px solid var(--border-color);
       margin-top: auto;
@@ -669,12 +771,57 @@
     footer a:hover {
       color: var(--accent-hover);
     }
+
+    @media (max-width: 520px) {
+      header {
+        padding: 1.25rem 1rem;
+      }
+
+      .header-logo {
+        font-size: 1.55rem;
+        letter-spacing: 0.1em;
+      }
+
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      .hero-section,
+      .result-section {
+        padding: 2.5rem 1.25rem;
+      }
+
+      .scenario-card,
+      .modal-content {
+        padding: 2rem 1.35rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .subtitle-divider {
+        display: block;
+        height: 0.4rem;
+        margin: 0;
+        font-size: 0;
+      }
+
+      .scenario-question {
+        font-size: 1.28rem;
+        line-height: 1.68;
+      }
+
+      .quote-original {
+        font-size: 1.32rem;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="#" class="header-logo" onclick="resetToHome(event)">Choice & Verse</a>
+    <a href="#" class="header-logo" lang="en" onclick="resetToHome(event)">Choice &amp; Verse</a>
   </header>
 
   <div class="container">
@@ -682,8 +829,8 @@
     <!-- VIEW 1: START SCREEN -->
     <div id="start-view" class="view active">
       <div class="hero-section">
-        <h1 class="hero-title">Shakespeare</h1>
-        <p class="hero-subtitle">Choice & Verse: 셰익스피어의 딜레마 속으로</p>
+        <h1 class="hero-title" lang="en">Shakespeare</h1>
+        <p class="hero-subtitle"><span class="hero-kicker" lang="en">Choice &amp; Verse</span><span class="subtitle-divider" aria-hidden="true">·</span><span>셰익스피어의 딜레마 속으로</span></p>
         
         <div class="filter-title">작품 선택 필터</div>
         <div class="filter-group" id="filter-group">
@@ -732,7 +879,7 @@
     <div id="result-view" class="view">
       <div class="result-section">
         <h2 class="result-title">문학적 모험 완료</h2>
-        <p style="color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em;">당신의 문학적 성향 유형</p>
+        <p class="result-eyebrow">당신의 문학적 성향 유형</p>
         <h1 class="archetype-name" id="result-archetype">고뇌하는 햄릿형</h1>
         <p class="archetype-desc" id="result-desc">
           당신은 중요한 결정을 내릴 때 깊이 사색하고 인물의 진심과 도덕적 의미를 헤아리는 편입니다.
@@ -761,7 +908,7 @@
   <!-- FULL SCREEN ARCHIVE OVERLAY -->
   <div class="archive-overlay" id="archive-overlay">
     <div class="archive-header">
-      <h2 class="archive-title">Shakespeare Quote Deck</h2>
+      <h2 class="archive-title" lang="en">Shakespeare Quote Deck</h2>
       <button class="btn-close" id="btn-close-archive">&times;</button>
     </div>
     <div class="archive-grid" id="archive-grid">
@@ -775,7 +922,7 @@
       <div class="modal-indicator" id="modal-indicator">원작의 선택</div>
       
       <div class="quote-box">
-        <p class="quote-original" id="modal-quote-org">"To be, or not to be: that is the question."</p>
+        <p class="quote-original" id="modal-quote-org" lang="en">"To be, or not to be: that is the question."</p>
         <p class="quote-translation" id="modal-quote-trans">"사느냐 죽느냐, 그것이 문제로다."</p>
       </div>
 
@@ -792,7 +939,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2026 Choice & Verse. Designed for literature lovers.</p>
+    <p lang="en">&copy; 2026 Choice &amp; Verse. Designed for literature lovers.</p>
   </footer>
 
   <script>
@@ -1031,7 +1178,8 @@
       progressBarFill.style.width = `${progressPercent}%`;
 
       const scenario = filteredScenarios[currentScenarioIndex];
-      scenarioPlayTitle.textContent = scenario.playKo;
+      scenarioPlayTitle.textContent = scenario.play;
+      scenarioPlayTitle.lang = "en";
       scenarioQuestion.textContent = scenario.question;
       scenarioDescription.textContent = scenario.description;
 
@@ -1152,10 +1300,10 @@
           card.innerHTML = `
             <div>
               <div class="archive-card-header">
-                <span class="archive-play-tag">${scenario.playKo}</span>
+                <span class="archive-play-tag" lang="en">${scenario.play}</span>
                 <span style="color: var(--accent-color); font-weight: bold;">🔓 잠금해제됨</span>
               </div>
-              <div class="archive-quote-text">"${originalChoice.quoteOrg}"</div>
+              <div class="archive-quote-text" lang="en">"${originalChoice.quoteOrg}"</div>
               <div class="archive-quote-trans">${originalChoice.quoteKo}</div>
             </div>
             <div class="archive-insight">
@@ -1166,10 +1314,10 @@
           card.innerHTML = `
             <div>
               <div class="archive-card-header">
-                <span class="archive-play-tag">${scenario.playKo}</span>
+                <span class="archive-play-tag" lang="en">${scenario.play}</span>
                 <span style="color: var(--text-muted);">🔒 미완료</span>
               </div>
-              <div class="archive-quote-text" style="filter: blur(4px); user-select: none;">"To be, or not to be..."</div>
+              <div class="archive-quote-text" lang="en" style="filter: blur(4px); user-select: none;">"To be, or not to be..."</div>
               <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
                 이 시나리오에서 원작의 정답을 맞혀 명대사 카드를 획득해 보세요!
               </div>
