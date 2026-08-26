@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shakespeare: Choice & Verse</title>
+  <meta name="description" content="셰익스피어의 딜레마 속으로: 당신의 선택은? 셰익스피어의 주요 작품과 명대사를 쉽고 흥미롭게 배울 수 있는 인터랙티브 텍스트 어드벤처 학습 웹 앱">
+  
+  <!-- Google Fonts for premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* Dark Antique parchment inspired design tokens */
+    :root {
+      --bg-color: #120e0b;
+      --card-bg: #1c1612;
+      --text-color: #e9e0d2;
+      --text-muted: #bdae9c;
+      --primary-color: #8c1d27; /* Deep Burgundy */
+      --primary-hover: #a6242f;
+      --accent-color: #d4af37; /* Antique Gold */
+      --accent-hover: #f3cf55;
+      --border-color: #3d3025;
+      --shadow-color: rgba(0, 0, 0, 0.6);
+      --font-antique: 'Cinzel', serif;
+      --font-serif: 'Noto Serif KR', serif;
+      --font-quote: 'Playfair Display', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-serif);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(140, 29, 39, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 10% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+      position: relative;
+    }
+
+    /* Textured overlay simulation */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      background-color: rgba(18, 14, 11, 0.85);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-logo {
+      font-family: var(--font-antique);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--accent-color);
+      text-decoration: none;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      transition: color 0.3s;
+    }
+
+    .header-logo:hover {
+      color: var(--accent-hover);
+    }
+
+    .container {
+      flex: 1;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Interactive components & views */
+    .view {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+    }
+
+    /* Start screen styling */
+    .hero-section {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+    }
+
+    .hero-title {
+      font-family: var(--font-antique);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-style: italic;
+    }
+
+    .filter-title {
+      font-family: var(--font-antique);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-color);
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--text-color);
+    }
+
+    .filter-btn.active {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(140, 29, 39, 0.5);
+    }
+
+    /* Antique elegant button design */
+    .btn-gold {
+      background: linear-gradient(135deg, var(--accent-color), #b28d28);
+      color: #120e0b;
+      font-family: var(--font-antique);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      margin: 0 auto;
+      display: inline-block;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+      background: linear-gradient(135deg, var(--accent-hover), var(--accent-color));
+    }
+
+    .btn-gold:active {
+      transform: translateY(1px);
+    }
+
+    /* Game Play Area */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: var(--border-color);
+      border-radius: 3px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .stat-badge {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat-badge .icon {
+      color: var(--accent-color);
+    }
+
+    /* Scenario Card */
+    .scenario-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .play-title {
+      font-family: var(--font-antique);
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .scenario-question {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.4;
+      color: #fff;
+    }
+
+    .scenario-description {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      position: relative;
+      padding-left: 1.2rem;
+      border-left: 2px solid var(--primary-color);
+    }
+
+    .choices-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .choice-card {
+      background: rgba(18, 14, 11, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .choice-card:hover {
+      background: rgba(140, 29, 39, 0.15);
+      border-color: var(--accent-color);
+      transform: translateX(4px);
+    }
+
+    .choice-label {
+      font-family: var(--font-antique);
+      font-size: 0.8rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    .choice-text {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    /* Dynamic feedback elements */
+    .badge-icon {
+      font-size: 1.5rem;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 2px var(--accent-color)); }
+      100% { transform: scale(1.15); filter: drop-shadow(0 0 10px var(--accent-color)); }
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1.5px solid var(--accent-color);
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      padding: 2.5rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+      position: relative;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-indicator {
+      font-family: var(--font-antique);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-indicator.correct {
+      color: var(--accent-color);
+    }
+
+    .modal-indicator.incorrect {
+      color: var(--text-muted);
+    }
+
+    .quote-box {
+      background: rgba(18, 14, 11, 0.6);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .quote-original {
+      font-family: var(--font-quote);
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--accent-color);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .quote-translation {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--text-color);
+    }
+
+    .explanation-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.8rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.2rem;
+      text-align: left;
+    }
+
+    .badge-alert {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(214, 175, 55, 0.1);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-bottom: 1.8rem;
+      font-family: var(--font-antique);
+      letter-spacing: 0.05em;
+    }
+
+    /* Result View */
+    .result-section {
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .result-title {
+      font-family: var(--font-antique);
+      font-size: 2.2rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .archetype-name {
+      font-family: var(--font-antique);
+      font-size: 2.5rem;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+    }
+
+    .archetype-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: rgba(18, 14, 11, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+    }
+
+    .stat-val {
+      font-family: var(--font-antique);
+      font-size: 1.8rem;
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+
+    .stat-lbl {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      font-family: var(--font-antique);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-color);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    /* Archive Card deck style */
+    .archive-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-color);
+      z-index: 900;
+      display: none;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+    }
+
+    .archive-overlay.active {
+      display: flex;
+    }
+
+    .archive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto 2rem auto;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .archive-title {
+      font-family: var(--font-antique);
+      font-size: 1.8rem;
+      color: var(--accent-color);
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .btn-close:hover {
+      color: var(--accent-color);
+    }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 600px) {
+      .archive-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .archive-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .archive-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-color);
+      opacity: 0.6;
+    }
+
+    .archive-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .archive-play-tag {
+      font-family: var(--font-antique);
+      color: var(--accent-color);
+      letter-spacing: 0.05em;
+    }
+
+    .archive-quote-text {
+      font-family: var(--font-quote);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .archive-quote-trans {
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .archive-insight {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 0.8rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--accent-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="header-logo" onclick="resetToHome(event)">Choice & Verse</a>
+  </header>
+
+  <div class="container">
+    
+    <!-- VIEW 1: START SCREEN -->
+    <div id="start-view" class="view active">
+      <div class="hero-section">
+        <h1 class="hero-title">Shakespeare</h1>
+        <p class="hero-subtitle">Choice & Verse: 셰익스피어의 딜레마 속으로</p>
+        
+        <div class="filter-title">작품 선택 필터</div>
+        <div class="filter-group" id="filter-group">
+          <button class="filter-btn active" data-filter="all">전체 작품</button>
+          <button class="filter-btn" data-filter="hamlet">햄릿</button>
+          <button class="filter-btn" data-filter="macbeth">맥베스</button>
+          <button class="filter-btn" data-filter="romeo">로미오와 줄리엣</button>
+          <button class="filter-btn" data-filter="othello">오셀로</button>
+        </div>
+
+        <button class="btn-gold" id="start-btn">플레이 시작</button>
+      </div>
+    </div>
+
+    <!-- VIEW 2: GAME PLAY SCREEN -->
+    <div id="game-view" class="view">
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-badge">
+          <span class="icon">✨</span>
+          <span>이해도 포인트: <strong id="score-val">0</strong></span>
+        </div>
+        <div class="stat-badge">
+          <span class="icon">🏆</span>
+          <span>획득 뱃지: <strong id="badge-val">0</strong>개</span>
+        </div>
+      </div>
+
+      <div class="scenario-card" id="scenario-card">
+        <div class="play-title" id="scenario-play-title">Hamlet</div>
+        <h2 class="scenario-question" id="scenario-question">숙부의 기도하는 모습을 본 햄릿, 지금 복수해야 할까?</h2>
+        <div class="scenario-description" id="scenario-description">
+          아버지의 원수인 클로디어스가 무릎을 꿇고 고백 기도를 드리고 있는 현장을 목격했습니다. 지금 칼을 빼든다면 복수는 쉽고 확실합니다. 당신의 선택은?
+        </div>
+
+        <div class="choices-container" id="choices-container">
+          <!-- Dynamically populated choices -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: RESULT VIEW -->
+    <div id="result-view" class="view">
+      <div class="result-section">
+        <h2 class="result-title">문학적 모험 완료</h2>
+        <p style="color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.1em;">당신의 문학적 성향 유형</p>
+        <h1 class="archetype-name" id="result-archetype">고뇌하는 햄릿형</h1>
+        <p class="archetype-desc" id="result-desc">
+          당신은 중요한 결정을 내릴 때 깊이 사색하고 인물의 진심과 도덕적 의미를 헤아리는 편입니다.
+        </p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-val" id="final-score">0</div>
+            <div class="stat-lbl">최종 이해도 포인트</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="final-badges">0</div>
+            <div class="stat-lbl">총 획득한 문학 뱃지</div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-gold" id="btn-restart">다시 도전하기</button>
+          <button class="btn-secondary" id="btn-show-archive">배운 명대사 카드 모아보기</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FULL SCREEN ARCHIVE OVERLAY -->
+  <div class="archive-overlay" id="archive-overlay">
+    <div class="archive-header">
+      <h2 class="archive-title">Shakespeare Quote Deck</h2>
+      <button class="btn-close" id="btn-close-archive">&times;</button>
+    </div>
+    <div class="archive-grid" id="archive-grid">
+      <!-- Dynamically filled with unlocked or all quote cards -->
+    </div>
+  </div>
+
+  <!-- FEEDBACK MODAL -->
+  <div class="modal-overlay" id="feedback-modal">
+    <div class="modal-content">
+      <div class="modal-indicator" id="modal-indicator">원작의 선택</div>
+      
+      <div class="quote-box">
+        <p class="quote-original" id="modal-quote-org">"To be, or not to be: that is the question."</p>
+        <p class="quote-translation" id="modal-quote-trans">"사느냐 죽느냐, 그것이 문제로다."</p>
+      </div>
+
+      <div class="explanation-text" id="modal-explanation">
+        상세한 문학적 설명이 이곳에 들어갑니다. 셰익스피어가 의도했던 대사의 뉘앙스와 극중 딜레마를 배웁니다.
+      </div>
+
+      <div id="modal-badge-container">
+        <!-- Badge unlocked banner dynamically inserted here -->
+      </div>
+
+      <button class="btn-gold" id="modal-next-btn" style="display: block; width: 100%;">다음 시나리오로</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Choice & Verse. Designed for literature lovers.</p>
+  </footer>
+
+  <script>
+    // Game Content Data
+    const SCENARIOS = [
+      {
+        id: 1,
+        play: "Hamlet",
+        playKo: "햄릿",
+        question: "1. 기도하는 숙부 클로디어스를 마주한 햄릿의 복수의 시점",
+        description: "아버지를 독살하고 왕위를 찬탈한 숙부 클로디어스가 무릎을 꿇고 간절히 기도하는 모습을 발견했습니다. 완벽한 암살 기회이지만, 햄릿의 마음속에 큰 갈등이 피어오릅니다.",
+        choices: [
+          {
+            text: "지금 당장 베어 버린다. 그가 저지른 악행에 비하면 기도를 하든 안 하든 즉각적인 처벌이 마땅하다.",
+            isOriginal: false,
+            feedback: "당신의 결단력은 훌륭하지만, 햄릿은 그 순간 숙부가 회개하여 천국에 갈까 우려했습니다. 햄릿의 깊은 신학적, 철학적 번민과는 다른 현대적인 결단입니다."
+          },
+          {
+            text: "칼을 거둔다. 기도 중에 죽어 그의 영혼이 구원받는다면 참된 복수가 아니다. 더 죄악으로 가득 찰 순간을 기다린다.",
+            isOriginal: true,
+            quoteOrg: "Now might I do it pat, now he is praying;\nAnd now I'll do't. And so he goes to heaven;\nAnd so am I reveng'd. That would be scann'd.",
+            quoteKo: "지금 당장 해치울 수도 있다. 지금 기도 중이시니. 그러면 천국으로 가겠지. 그게 어찌 복수가 되겠는가. 곰곰이 생각해야 한다.",
+            feedback: "정답입니다! 햄릿은 단순히 칼을 휘두르는 복수자가 아니라, 사후의 심판까지 계산하는 극도의 사색가입니다. 그는 결국 복수를 유예하는 선택을 내립니다.",
+            badgeName: "사색의 왕세자 뱃지"
+          },
+          {
+            text: "칼을 버리고 숙부 앞에 서서 정당한 결투를 신청하여 나라 앞에서 합법적으로 죄를 묻는다.",
+            isOriginal: false,
+            feedback: "궁정 내 권력 암투 상황에서 결투 신청은 도리어 반역으로 잡힐 위험이 큽니다. 원작의 햄릿은 내면의 번뇌 속에서 스스로 칼을 유예하는 선택을 택했습니다."
+          }
+        ]
+      },
+      {
+        id: 2,
+        play: "Hamlet",
+        playKo: "햄릿",
+        question: "2. 세상의 고통과 삶의 무게 앞에 마주 선 독백",
+        description: "숙부의 죄악, 어머니의 변절, 세상의 위선과 번뇌 속에서 햄릿은 삶과 죽음이라는 가장 근본적인 실존적 질문에 정면으로 대면합니다.",
+        choices: [
+          {
+            text: "운명의 맹렬한 돌팔매와 화살을 참고 견디며, 고통스러운 삶을 묵묵히 버텨내기로 결심한다.",
+            isOriginal: false,
+            feedback: "인내하는 삶 역시 햄릿이 고민한 한 축이지만, 그는 독백 속에서 고뇌 그 자체의 무게와 사후 세계에 대한 두려움 사이에서 끝없이 대립하며 방황했습니다."
+          },
+          {
+            text: "존재와 비존재, 고통스러운 생을 지속할 것인가 아니면 모든 것을 끝낼 것인가에 대해 깊이 자문한다.",
+            isOriginal: true,
+            quoteOrg: "To be, or not to be, that is the question:\nWhether 'tis nobler in the mind to suffer\nThe slings and arrows of outrageous fortune,\nOr to take arms against a sea of troubles...",
+            quoteKo: "사느냐 죽느냐, 그것이 문제로다. 가혹한 운명의 화살을 마음속으로 참아내는 것이 고결한가, 아니면 몰려오는 고난에 맞서 칼을 뽑아 끝장내는 것이 고결한가...",
+            feedback: "정답입니다! 이 유명한 독백은 인간 실존에 관한 최고의 고뇌를 담고 있습니다. 삶의 고통을 감내하는 것과 스스로 죽음을 선택하는 것 사이의 영원한 딜레마를 상징합니다.",
+            badgeName: "실존적 고뇌 뱃지"
+          },
+          {
+            text: "모든 번민을 잊기 위해 왕위를 포기하고 멀리 유학을 떠나 새로운 삶을 개척한다.",
+            isOriginal: false,
+            feedback: "외면과 회피는 햄릿의 비극적 운명이 아니었습니다. 그는 결국 삶과 죽음의 경계에 서서 이 질문을 스스로에게 단호하게 던졌습니다."
+          }
+        ]
+      },
+      {
+        id: 3,
+        play: "macbeth",
+        playKo: "맥베스",
+        question: "3. 마녀들의 달콤한 예언과 던컨 왕 시해의 갈등",
+        description: "세 마녀로부터 미래의 왕이 될 것이라는 예언을 들은 맥베스. 마침 던컨 왕이 자신의 성에 머물게 됩니다. 부인의 집요한 충동질 속에서 맥베스는 왕권에 대한 야망과 도덕성 사이에서 떨고 있습니다.",
+        choices: [
+          {
+            text: "하늘에 순응하며 반역을 단념한다. 자연스러운 운명의 순리에 왕이 될 기회를 맡기기로 결심한다.",
+            isOriginal: false,
+            feedback: "맥베스는 마지막 순간까지 도덕적 공포에 떨며 주저했지만, 결국 마음속 가득한 야망의 칼을 꺾지 못하고 파멸의 길로 걸어 들어갔습니다."
+          },
+          {
+            text: "눈앞에 아른거리는 환영의 단검을 보고 온몸이 굳어지며, 예정된 왕 시해를 실행하러 비틀거리며 나아간다.",
+            isOriginal: true,
+            quoteOrg: "Is this a dagger which I see before me,\nThe handle toward my hand? Come, let me clutch thee.\nI have thee not, and yet I see thee still.",
+            quoteKo: "내 눈앞에 보이는 것이 단검인가? 손잡이가 내 손을 향하고 있구나. 이리 오너라, 내 너를 잡으리라. 잡히지 않는구나, 그러나 여전히 내 눈앞에 보이는구나.",
+            feedback: "정답입니다! 맥베스는 살인을 저지르기 직전 양심의 가책과 환각(공중에 떠 있는 단검)을 경험하며 극도의 공포와 피할 수 없는 파멸적 끌림에 시달렸습니다.",
+            badgeName: "야망의 단검 뱃지"
+          },
+          {
+            text: "던컨 왕에게 찾아가 마녀들의 예언을 정직하게 자수하고, 스스로 국경 밖으로 떠난다.",
+            isOriginal: false,
+            feedback: "만약 그랬다면 비극 맥베스는 성립하지 않았을 것입니다. 셰익스피어는 인간의 마음속에 내재된 권력 지향적 야성과 파멸을 예리하게 묘사했습니다."
+          }
+        ]
+      },
+      {
+        id: 4,
+        play: "romeo",
+        playKo: "로미오와 줄리엣",
+        question: "4. 가문의 깊은 증오의 장벽을 뛰어넘는 밤의 고백",
+        description: "철천지원수 집안인 캐퓰릿 가의 가면무도회에서 줄리엣을 보고 첫눈에 반한 로미오. 늦은 밤, 발코니 창가에 기대어 허공에 마음을 속삭이는 줄리엣을 보며 로미오는 위험을 무릅쓰고 숨을 죽입니다.",
+        choices: [
+          {
+            text: "부모님의 뜻에 어긋나지 않도록 지금은 가만히 물러나 훗날 합의의 중재자를 찾기로 한다.",
+            isOriginal: false,
+            feedback: "이성적인 타협은 로미오와 줄리엣의 맹목적이고 열정적인 청춘의 사랑과는 거리가 멉니다. 그들은 가문의 대립이라는 거대한 죽음 앞에서도 불꽃처럼 타올랐습니다."
+          },
+          {
+            text: "사랑하는 사람의 이름과 가문이라는 무의미한 껍데기를 버리고, 오직 서로의 온전한 존재만을 받아들이기를 호소한다.",
+            isOriginal: true,
+            quoteOrg: "O Romeo, Romeo! wherefore art thou Romeo?\nDeny thy father and refuse thy name;\nOr, if thou wilt not, be but sworn my love,\nAnd I'll no longer be a Capulet.",
+            quoteKo: "오 로미오, 로미오! 왜 당신은 로미오인가요? 아버지를 부정하고 그 이름을 버리세요. 싫으시다면 저를 사랑한다고 맹세만 해주세요. 그럼 저도 더 이상 캐퓰릿 가문의 사람이 되지 않겠어요.",
+            feedback: "정답입니다! 이름이란 그저 꼬리표일 뿐, 장미는 다른 이름으로 불려도 그 향기가 여전히 달콤하듯, 가문의 장벽조차 뚫어내는 순수한 청춘의 사랑을 노래하는 가장 위대한 명장면입니다.",
+            badgeName: "장미의 맹세 뱃지"
+          },
+          {
+            text: "가문의 명예를 생각해 로미오의 존재를 경계하고 그에게 물러설 것을 소리쳐 경고한다.",
+            isOriginal: false,
+            feedback: "줄리엣은 가문의 굴레보다 사랑하는 감정에 더 솔직했습니다. 그녀는 로미오라는 이름 대신 그 뒤의 생명력 있는 인간 자체를 원했습니다."
+          }
+        ]
+      },
+      {
+        id: 5,
+        play: "othello",
+        playKo: "오셀로",
+        question: "5. 이아고의 교묘한 속삭임과 커져만 가는 아내에 대한 의심",
+        description: "충직하다고 믿었던 부하 이아고가 아내 데스데모나와 부관 카시오의 사이가 의심스럽다며 손수건 이야기를 흘립니다. 질투의 악마가 오셀로의 마음을 갉아먹기 시작합니다.",
+        choices: [
+          {
+            text: "즉시 아내를 찾아가 자초지종을 담대하게 캐물어 불필요한 질투심을 현명하게 해소한다.",
+            isOriginal: false,
+            feedback: "불행히도 오셀로는 열린 대화 대신 이아고의 덫에 깊이 빠졌습니다. 의심은 대화 없이 증폭되어 결국 비극적인 파국으로 이어졌습니다."
+          },
+          {
+            text: "의심의 물증(손수건)을 붙잡고 괴로워하며 아내의 정절을 더럽혔다고 확신하고 질투의 지옥 속에 사로잡힌다.",
+            isOriginal: true,
+            quoteOrg: "O, beware, my lord, of jealousy;\nIt is the green-eyed monster which doth mock\nThe meat it feeds on.",
+            quoteKo: "오, 장군님, 질투를 조심하십시오. 그것은 사람의 마음을 조롱하며 파먹는 초록 눈을 한 괴물입니다.",
+            feedback: "정답입니다! 이아고는 짐짓 오셀로를 걱정하는 척하며 질투를 '초록 눈의 괴물'에 비유했고, 오셀로는 질투심에 휩싸여 시야가 흐려진 채 몰락의 길을 자초했습니다.",
+            badgeName: "초록 눈의 괴물 뱃지"
+          },
+          {
+            text: "이아고의 말이 거짓 음모임을 알아채고 분노하며 배신자인 이아고를 현장에서 즉각 참수한다.",
+            isOriginal: false,
+            feedback: "오셀로는 이아고를 '정직한 이아고'라 굳게 믿었습니다. 의심에 눈이 멀면 진실이 보이지 않는다는 인간 심리의 연약함을 잘 드러내는 대목입니다."
+          }
+        ]
+      }
+    ];
+
+    // App State Management
+    let currentFilter = "all";
+    let filteredScenarios = [];
+    let currentScenarioIndex = 0;
+    let score = 0;
+    let earnedBadges = [];
+    const userArchive = new Set(); // Stores IDs of correctly solved scenario indices to unlock details in deck
+
+    // DOM Elements
+    const startView = document.getElementById("start-view");
+    const gameView = document.getElementById("game-view");
+    const resultView = document.getElementById("result-view");
+    const filterGroup = document.getElementById("filter-group");
+    const startBtn = document.getElementById("start-btn");
+    
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const scoreVal = document.getElementById("score-val");
+    const badgeVal = document.getElementById("badge-val");
+    
+    const scenarioPlayTitle = document.getElementById("scenario-play-title");
+    const scenarioQuestion = document.getElementById("scenario-question");
+    const scenarioDescription = document.getElementById("scenario-description");
+    const choicesContainer = document.getElementById("choices-container");
+    
+    // Result elements
+    const resultArchetype = document.getElementById("result-archetype");
+    const resultDesc = document.getElementById("result-desc");
+    const finalScore = document.getElementById("final-score");
+    const finalBadges = document.getElementById("final-badges");
+    const btnRestart = document.getElementById("btn-restart");
+    const btnShowArchive = document.getElementById("btn-show-archive");
+    
+    // Archive elements
+    const archiveOverlay = document.getElementById("archive-overlay");
+    const archiveGrid = document.getElementById("archive-grid");
+    const btnCloseArchive = document.getElementById("btn-close-archive");
+
+    // Modal elements
+    const feedbackModal = document.getElementById("feedback-modal");
+    const modalIndicator = document.getElementById("modal-indicator");
+    const modalQuoteOrg = document.getElementById("modal-quote-org");
+    const modalQuoteTrans = document.getElementById("modal-quote-trans");
+    const modalExplanation = document.getElementById("modal-explanation");
+    const modalBadgeContainer = document.getElementById("modal-badge-container");
+    const modalNextBtn = document.getElementById("modal-next-btn");
+
+    // Filter Logic
+    filterGroup.addEventListener("click", (e) => {
+      if (e.target.classList.contains("filter-btn")) {
+        document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+        e.target.classList.add("active");
+        currentFilter = e.target.getAttribute("data-filter");
+      }
+    });
+
+    // Initialize Game
+    startBtn.addEventListener("click", () => {
+      if (currentFilter === "all") {
+        filteredScenarios = [...SCENARIOS];
+      } else {
+        filteredScenarios = SCENARIOS.filter(s => s.play.toLowerCase() === currentFilter.toLowerCase());
+      }
+
+      if (filteredScenarios.length === 0) {
+        alert("선택한 작품의 시나리오가 준비 중입니다. 다른 필터를 선택해 주세요.");
+        return;
+      }
+
+      currentScenarioIndex = 0;
+      score = 0;
+      earnedBadges = [];
+      scoreVal.textContent = "0";
+      badgeVal.textContent = "0";
+
+      switchView("game-view");
+      renderScenario();
+    });
+
+    function switchView(viewId) {
+      document.querySelectorAll(".view").forEach(view => {
+        view.classList.remove("active");
+      });
+      document.getElementById(viewId).classList.add("active");
+    }
+
+    function renderScenario() {
+      if (currentScenarioIndex >= filteredScenarios.length) {
+        showResults();
+        return;
+      }
+
+      // Update progress bar
+      const progressPercent = (currentScenarioIndex / filteredScenarios.length) * 100;
+      progressBarFill.style.width = `${progressPercent}%`;
+
+      const scenario = filteredScenarios[currentScenarioIndex];
+      scenarioPlayTitle.textContent = scenario.playKo;
+      scenarioQuestion.textContent = scenario.question;
+      scenarioDescription.textContent = scenario.description;
+
+      choicesContainer.innerHTML = "";
+      scenario.choices.forEach((choice, index) => {
+        const choiceBtn = document.createElement("button");
+        choiceBtn.className = "choice-card";
+        choiceBtn.innerHTML = `
+          <span class="choice-label">선택지 ${index + 1}</span>
+          <span class="choice-text">${choice.text}</span>
+        `;
+        choiceBtn.addEventListener("click", () => handleChoice(choice, scenario));
+        choicesContainer.appendChild(choiceBtn);
+      });
+    }
+
+    function handleChoice(choice, scenario) {
+      // Configure Feedback Modal
+      if (choice.isOriginal) {
+        score += 20;
+        scoreVal.textContent = score;
+        userArchive.add(scenario.id); // Save progress for archive
+
+        modalIndicator.textContent = "✨ 원작의 선택 (Correct)";
+        modalIndicator.className = "modal-indicator correct";
+        
+        // Show original quote
+        modalQuoteOrg.style.display = "block";
+        modalQuoteTrans.style.display = "block";
+        modalQuoteOrg.textContent = scenario.choices.find(c => c.isOriginal).quoteOrg;
+        modalQuoteTrans.textContent = scenario.choices.find(c => c.isOriginal).quoteKo;
+        
+        // Badge logic
+        if (choice.badgeName && !earnedBadges.includes(choice.badgeName)) {
+          earnedBadges.push(choice.badgeName);
+          badgeVal.textContent = earnedBadges.length;
+          modalBadgeContainer.innerHTML = `
+            <div class="badge-alert">
+              <span class="badge-icon">🏆</span>
+              <span>새로운 뱃지 획득: <strong>${choice.badgeName}</strong></span>
+            </div>
+          `;
+        } else {
+          modalBadgeContainer.innerHTML = "";
+        }
+      } else {
+        modalIndicator.textContent = "💡 현대의 재해석 / 다른 인물의 선택";
+        modalIndicator.className = "modal-indicator incorrect";
+        modalQuoteOrg.style.display = "none";
+        modalQuoteTrans.style.display = "none";
+        modalBadgeContainer.innerHTML = "";
+      }
+
+      modalExplanation.textContent = choice.feedback;
+      feedbackModal.classList.add("active");
+    }
+
+    // Modal Close and Next flow
+    modalNextBtn.addEventListener("click", () => {
+      feedbackModal.classList.remove("active");
+      currentScenarioIndex++;
+      renderScenario();
+    });
+
+    // Results logic
+    function showResults() {
+      progressBarFill.style.width = "100%";
+      finalScore.textContent = score;
+      finalBadges.textContent = earnedBadges.length;
+
+      // Analyze Archetype
+      let archetype = "";
+      let desc = "";
+
+      const correctRatio = score / (filteredScenarios.length * 20);
+
+      if (correctRatio >= 0.8) {
+        archetype = "정통 셰익스피어 학자형";
+        desc = "당신은 원작 인물들의 감정과 시대적 맥락을 완벽히 꿰뚫어 보고 있습니다. 극의 비극성과 아름다움을 깊이 이해하는 탁월한 문학가적 관점을 가졌습니다.";
+      } else if (correctRatio >= 0.5) {
+        archetype = "야망 넘치는 모험가형";
+        desc = "원작의 선택과 현대적 상상력 사이에서 균형 잡힌 시각을 보여줍니다. 실천적 의지와 고뇌를 동시에 헤아릴 줄 아는 세련된 통찰가입니다.";
+      } else {
+        archetype = "고뇌하는 햄릿형";
+        desc = "틀에 얽매이지 않고 현대적인 해석과 다양한 인물의 입장에 열려 있습니다. 복잡다단한 인간성에 대해 끊임없이 질문을 던지는 탐구자입니다.";
+      }
+
+      resultArchetype.textContent = archetype;
+      resultDesc.textContent = desc;
+
+      switchView("result-view");
+    }
+
+    // Restart game
+    btnRestart.addEventListener("click", () => {
+      switchView("start-view");
+    });
+
+    function resetToHome(e) {
+      e.preventDefault();
+      switchView("start-view");
+      archiveOverlay.classList.remove("active");
+      feedbackModal.classList.remove("active");
+    }
+
+    // Archive Display logic
+    btnShowArchive.addEventListener("click", () => {
+      archiveGrid.innerHTML = "";
+      
+      SCENARIOS.forEach(scenario => {
+        const hasUnlocked = userArchive.has(scenario.id);
+        const originalChoice = scenario.choices.find(c => c.isOriginal);
+
+        const card = document.createElement("div");
+        card.className = "archive-card";
+        
+        if (hasUnlocked) {
+          card.innerHTML = `
+            <div>
+              <div class="archive-card-header">
+                <span class="archive-play-tag">${scenario.playKo}</span>
+                <span style="color: var(--accent-color); font-weight: bold;">🔓 잠금해제됨</span>
+              </div>
+              <div class="archive-quote-text">"${originalChoice.quoteOrg}"</div>
+              <div class="archive-quote-trans">${originalChoice.quoteKo}</div>
+            </div>
+            <div class="archive-insight">
+              <strong>문학적 인사이트:</strong> ${originalChoice.feedback}
+            </div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div>
+              <div class="archive-card-header">
+                <span class="archive-play-tag">${scenario.playKo}</span>
+                <span style="color: var(--text-muted);">🔒 미완료</span>
+              </div>
+              <div class="archive-quote-text" style="filter: blur(4px); user-select: none;">"To be, or not to be..."</div>
+              <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted); font-style: italic;">
+                이 시나리오에서 원작의 정답을 맞혀 명대사 카드를 획득해 보세요!
+              </div>
+            </div>
+          `;
+        }
+        archiveGrid.appendChild(card);
+      });
+
+      archiveOverlay.classList.add("active");
+    });
+
+    btnCloseArchive.addEventListener("click", () => {
+      archiveOverlay.classList.remove("active");
+    });
+  </script>
+</body>
+</html>
